@@ -1,25 +1,30 @@
-import { getRepository } from 'typeorm';
 import jwt from 'jsonwebtoken';
 import { compare } from 'bcryptjs';
 
-import { User } from '../models/User';
-import { AppError } from '../errors/AppError';
+import { inject, injectable } from 'tsyringe';
+import { User } from '@modules/users/infra/typeorm/entities/User';
+import { AppError } from '@shared/errors/AppError';
+import IUsersRepository from '../repositories/IUsersRepository';
 
 interface UserProps {
   email: string;
   password: string;
 }
 
-interface Response {
+interface IResponse {
   user: User;
   token: string;
 }
 
+@injectable()
 class AuthenticateUserService {
-  async execute({ email, password }: UserProps): Promise<Response> {
-    const usersRepository = getRepository(User);
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository
+  ) {}
 
-    const user = await usersRepository.findOne({ where: { email } });
+  async execute({ email, password }: UserProps): Promise<IResponse> {
+    const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
       throw new AppError('Incorrect email and password combination', 401);
@@ -42,4 +47,4 @@ class AuthenticateUserService {
   }
 }
 
-export { AuthenticateUserService };
+export default AuthenticateUserService;

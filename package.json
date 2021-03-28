@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "dev:server": "tsnd --inspect --transpile-only --ignore-watch node_modules src/server.ts",
-    "typeorm": "tsnd ./node_modules/typeorm/cli.js"
+    "dev:server": "tsnd -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/http/server.ts",
+    "typeorm": "tsnd -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
   "license": "MIT",
   "devDependencies": {
@@ -24,6 +24,7 @@
     "eslint-plugin-prettier": "^3.3.1",
     "prettier": "^2.2.1",
     "ts-node-dev": "^1.1.6",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "^4.2.3"
   },
   "dependencies": {
@@ -34,6 +35,7 @@
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.5.0",
     "typeorm": "^0.2.31",
     "uuid": "^8.3.2"
   }

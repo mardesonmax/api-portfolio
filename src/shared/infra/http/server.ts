@@ -1,8 +1,11 @@
 import 'reflect-metadata';
+import 'dotenv/config';
+
 import express from 'express';
 import 'express-async-errors';
 
-import './database';
+import '../typeorm';
+import '@shared/container';
 
 import routes from './routes';
 import getErrors from './middlewares/getErrors';
@@ -14,4 +17,6 @@ app.use(routes);
 
 app.use(getErrors);
 
-export default app;
+const port = process.env.PORT || 3333;
+
+app.listen(port, () => console.log('🚀️ Server started'));
