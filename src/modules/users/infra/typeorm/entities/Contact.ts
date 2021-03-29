@@ -2,30 +2,50 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
+import User from './User';
 
-@Entity('users')
-class User {
+@Entity('contacts')
+class Contact {
   @PrimaryColumn('uuid')
   readonly id: string;
 
   @Column()
-  name: string;
-
-  @Column({ unique: true })
-  email: string;
+  user_id: string;
 
   @Column()
-  password: string;
+  facebook?: string;
+
+  @Column()
+  twitter?: string;
+
+  @Column()
+  instagram?: string;
+
+  @Column()
+  email?: string;
+
+  @Column()
+  whatsapp?: string;
+
+  @Column()
+  github?: string;
+
+  @Column()
+  linkedin?: string;
 
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToOne(() => User)
+  user: User;
 
   constructor() {
     if (!this.id) {
@@ -34,4 +54,4 @@ class User {
   }
 }
 
-export default User;
+export default Contact;

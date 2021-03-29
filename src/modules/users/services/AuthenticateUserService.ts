@@ -2,8 +2,8 @@ import jwt from 'jsonwebtoken';
 import { compare } from 'bcryptjs';
 
 import { inject, injectable } from 'tsyringe';
-import { User } from '@modules/users/infra/typeorm/entities/User';
-import { AppError } from '@shared/errors/AppError';
+import User from '@modules/users/infra/typeorm/entities/User';
+import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepository';
 
 interface UserProps {

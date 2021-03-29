@@ -2,7 +2,7 @@ import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import { hashSync } from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
 
-export default class CreateUsers1616843426563 implements MigrationInterface {
+export class CreateUsers1616843426563 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
@@ -28,6 +28,11 @@ export default class CreateUsers1616843426563 implements MigrationInterface {
           },
           {
             name: 'created_at',
+            type: 'timestamp',
+            default: 'now()',
+          },
+          {
+            name: 'updated_at',
             type: 'timestamp',
             default: 'now()',
           },
