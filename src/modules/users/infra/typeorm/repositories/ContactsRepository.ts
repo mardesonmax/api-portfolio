@@ -23,8 +23,8 @@ class ContactsRepository implements IContactsRepository {
     return contact;
   }
 
-  findByUserId(user_id: string): Promise<Contact> {
-    const contact = this.ormRepository.findOne({
+  async findByUserId(user_id: string): Promise<Contact | undefined> {
+    const contact = await this.ormRepository.findOne({
       where: {
         user_id,
       },

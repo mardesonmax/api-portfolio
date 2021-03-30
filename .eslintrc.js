@@ -2,6 +2,7 @@ module.exports = {
   env: {
     es2021: true,
     node: true,
+    jest: true,
   },
   extends: [
     'airbnb-base',
@@ -14,18 +15,32 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'prettier'],
   rules: {
+    'no-underscored-danger': 'off',
+    'prettier/prettier': 'error',
+    'class-methods-use-this': 'off',
     camelcase: 'off',
+    'import/no-extraneous-dependencies': 'off',
+    '@typescript-eslint/no-var-requires': 'off',
     'no-useless-constructor': 'off',
-    'import/prefer-default-export': 'off',
     '@typescript-eslint/no-unused-vars': [
       'error',
       {
         argsIgnorePattern: '_',
       },
     ],
-    'class-methods-use-this': 'off',
+    '@typescript-eslint/naming-convention': [
+      'error',
+      {
+        selector: 'interface',
+        format: ['PascalCase'],
+        custom: {
+          regex: '^I[A-Z]',
+          match: true,
+        },
+      },
+    ],
     'import/extensions': [
       'error',
       'ignorePackages',

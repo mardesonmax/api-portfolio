@@ -1,12 +1,13 @@
-import jwt from 'jsonwebtoken';
-import { compare } from 'bcryptjs';
-
 import { inject, injectable } from 'tsyringe';
+import jwt from 'jsonwebtoken';
+
 import User from '@modules/users/infra/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
+import authConfig from '@config/auth';
 import IUsersRepository from '../repositories/IUsersRepository';
+import IHashProvider from '../provider/HashProvider/models/IHashProvider';
 
-interface UserProps {
+interface IUserProps {
   email: string;
   password: string;
 }
@@ -20,28 +21,34 @@ interface IResponse {
 class AuthenticateUserService {
   constructor(
     @inject('UsersRepository')
-    private usersRepository: IUsersRepository
+    private usersRepository: IUsersRepository,
+
+    @inject('HashProvider')
+    private hashProvider: IHashProvider
   ) {}
 
-  async execute({ email, password }: UserProps): Promise<IResponse> {
+  async execute({ email, password }: IUserProps): Promise<IResponse> {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
       throw new AppError('Incorrect email and password combination', 401);
     }
 
-    const passwordVerify = await compare(password, user.password);
+    const passwordVerify = await this.hashProvider.compareHash(
+      password,
+      user.password
+    );
 
     if (!passwordVerify) {
       throw new AppError('Incorrect email and password combination', 401);
     }
 
-    const token = jwt.sign({}, process.env.SECRET_KEY, {
-      subject: user.id,
-      expiresIn: process.env.EXPIRED,
-    });
+    const { secret, expiresIn } = authConfig.jtw;
 
-    delete user.password;
+    const token = jwt.sign({}, secret, {
+      subject: user.id,
+      expiresIn,
+    });
 
     return { user, token };
   }

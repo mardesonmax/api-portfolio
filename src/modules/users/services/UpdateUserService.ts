@@ -1,11 +1,11 @@
-import bcrypt from 'bcryptjs';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 import User from '@modules/users/infra/typeorm/entities/User';
 import IUsersRepository from '../repositories/IUsersRepository';
+import IHashProvider from '../provider/HashProvider/models/IHashProvider';
 
-interface UserProps {
+interface IUserProps {
   id: string;
   name: string;
   email: string;
@@ -16,25 +16,26 @@ interface UserProps {
 class UpdateUserService {
   constructor(
     @inject('UsersRepository')
-    private usersRepository: IUsersRepository
+    private usersRepository: IUsersRepository,
+
+    @inject('HashProvider')
+    private hashProvider: IHashProvider
   ) {}
 
-  async execute({ id, name, email, password }: UserProps): Promise<User> {
+  async execute({ id, name, email, password }: IUserProps): Promise<User> {
     const user = await this.usersRepository.findById(id);
 
     if (!user) {
       throw new AppError('User does not authenticated', 401);
     }
 
-    const passwordHash = bcrypt.hashSync(password, 8);
+    const passwordHash = await this.hashProvider.generateHash(password);
 
     user.name = name;
     user.email = email;
     user.password = passwordHash;
 
     await this.usersRepository.save(user);
-
-    delete user.password;
 
     return user;
   }
