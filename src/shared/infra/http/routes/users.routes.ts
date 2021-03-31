@@ -3,11 +3,11 @@ import UsersController from '../controllers/UsersCrontroller';
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
-const userRoutes = Router();
+const usersRouter = Router();
 const usersController = new UsersController();
 
-userRoutes.use(ensureAuthenticated);
+usersRouter.use(ensureAuthenticated);
 
-userRoutes.put('/', usersController.update);
+usersRouter.put('/', usersController.update);
 
-export default userRoutes;
+export default usersRouter;

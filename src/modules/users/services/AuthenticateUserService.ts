@@ -1,4 +1,5 @@
 import { inject, injectable } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 import jwt from 'jsonwebtoken';
 
 import User from '@modules/users/infra/typeorm/entities/User';
@@ -50,7 +51,7 @@ class AuthenticateUserService {
       expiresIn,
     });
 
-    return { user, token };
+    return { user: classToClass(user), token };
   }
 }
 

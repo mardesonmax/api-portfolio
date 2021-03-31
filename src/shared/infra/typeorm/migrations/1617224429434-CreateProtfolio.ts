@@ -1,12 +1,11 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
-import { hashSync } from 'bcryptjs';
-import { v4 as uuid } from 'uuid';
 
-export default class CreateUsers1616843426563 implements MigrationInterface {
+export default class CreateProtfolio1617224429434
+  implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'users',
+        name: 'projects',
         columns: [
           {
             name: 'id',
@@ -14,17 +13,30 @@ export default class CreateUsers1616843426563 implements MigrationInterface {
             isPrimary: true,
           },
           {
-            name: 'name',
+            name: 'title',
             type: 'varchar',
           },
           {
-            name: 'email',
+            name: 'description',
             type: 'varchar',
-            isUnique: true,
           },
           {
-            name: 'password',
+            name: 'link_code',
             type: 'varchar',
+            isNullable: true,
+          },
+          {
+            name: 'link_project',
+            type: 'varchar',
+            isNullable: true,
+          },
+          {
+            name: 'base_url',
+            type: 'varchar',
+          },
+          {
+            name: 'status',
+            type: 'boolean',
           },
           {
             name: 'created_at',
@@ -39,21 +51,9 @@ export default class CreateUsers1616843426563 implements MigrationInterface {
         ],
       })
     );
-
-    await queryRunner.manager
-      .createQueryBuilder()
-      .insert()
-      .into('users')
-      .values({
-        id: uuid(),
-        name: 'Admin',
-        email: 'admin@admin.com',
-        password: hashSync('123456', 8),
-      })
-      .execute();
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('users');
+    await queryRunner.dropTable('projects');
   }
 }
