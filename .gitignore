@@ -4,3 +4,5 @@
 .env
 ormconfig.json
 coverage
+tmp/upload/*
+!tmp/upload/.gitkeep
