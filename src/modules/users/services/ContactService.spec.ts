@@ -1,12 +1,18 @@
 import FakeContactsRepository from '../repositories/fakes/FakeContactsRepository';
 import ContactService from './ContactService';
 
-describe('ContactUser', () => {
+let fakeContactsRepository: FakeContactsRepository;
+
+let contactService: ContactService;
+
+describe('ContactUserService', () => {
+  beforeEach(() => {
+    fakeContactsRepository = new FakeContactsRepository();
+
+    contactService = new ContactService(fakeContactsRepository);
+  });
+
   it('should be able to create contact', async () => {
-    const fakeContactsRepository = new FakeContactsRepository();
-
-    const contactService = new ContactService(fakeContactsRepository);
-
     const contact = await contactService.execute({
       user_id: '123456789',
       email: 'test@email.com',
@@ -18,10 +24,6 @@ describe('ContactUser', () => {
   });
 
   it('should be able to update contact', async () => {
-    const fakeContactsRepository = new FakeContactsRepository();
-
-    const contactService = new ContactService(fakeContactsRepository);
-
     const contact = await contactService.execute({
       user_id: '123456789',
       email: 'test@email.com',

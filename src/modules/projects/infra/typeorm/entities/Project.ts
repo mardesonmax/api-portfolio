@@ -1,14 +1,21 @@
+import { Exclude } from 'class-transformer';
+
+import User from '@modules/users/infra/typeorm/entities/User';
 import {
   BeforeInsert,
   BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
+  OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { v4 as uuid } from 'uuid';
+import ProjectImage from './ProjectImage';
 
 @Entity('projects')
 class Project {
@@ -30,6 +37,9 @@ class Project {
   @Column({ nullable: true })
   base_url?: string;
 
+  @OneToOne(() => ProjectImage, (image) => image.project)
+  image: ProjectImage;
+
   @BeforeInsert()
   @BeforeUpdate()
   baseUrl(): void {
@@ -45,6 +55,15 @@ class Project {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @ManyToMany(() => User, (user) => user.projects)
+  @JoinTable({
+    name: 'users_projects',
+    joinColumn: { name: 'proj_id' },
+    inverseJoinColumn: { name: 'user_id' },
+  })
+  @Exclude()
+  users: User[];
 
   constructor() {
     if (!this.id) {

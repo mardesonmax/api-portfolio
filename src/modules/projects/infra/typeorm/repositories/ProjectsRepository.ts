@@ -3,6 +3,7 @@ import { getRepository, Repository } from 'typeorm';
 import ICreateProjectDTO from '@modules/projects/dtos/ICreateProjectDTO';
 import Project from '@modules/projects/infra/typeorm/entities/Project';
 import IProjectsRepository from '@modules/projects/repositories/IProjectsRepository';
+import formatBaseUrl from '@config/formatBaseUrl';
 
 class ProjectsRepository implements IProjectsRepository {
   private ormRepository: Repository<Project>;
@@ -23,13 +24,18 @@ class ProjectsRepository implements IProjectsRepository {
     return this.ormRepository.save(project);
   }
 
-  async findById(project_id: string): Promise<Project | undefined> {
-    return this.ormRepository.findOne(project_id);
+  async findAll(): Promise<Project[] | undefined> {
+    return this.ormRepository.find({ relations: ['image'] });
   }
 
-  async findByTitle(title: string): Promise<Project | undefined> {
+  async findById(id: string): Promise<Project | undefined> {
+    return this.ormRepository.findOne({ where: { id }, relations: ['image'] });
+  }
+
+  async findByBaseUrl(title: string): Promise<Project | undefined> {
+    const base_url = formatBaseUrl(title);
     return this.ormRepository.findOne({
-      where: { title },
+      where: { base_url },
     });
   }
 }
