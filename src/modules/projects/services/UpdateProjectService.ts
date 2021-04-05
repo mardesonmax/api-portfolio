@@ -8,6 +8,7 @@ import Project from '../infra/typeorm/entities/Project';
 import IProjectsRepository from '../repositories/IProjectsRepository';
 
 interface IRequest {
+  id: string;
   title: string;
   description: string;
   link_code?: string;
@@ -18,7 +19,7 @@ interface IRequest {
 }
 
 @injectable()
-class CreateProjectService {
+class UpdateProjectService {
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
@@ -28,6 +29,7 @@ class CreateProjectService {
   ) {}
 
   async execute({
+    id,
     title,
     description,
     link_code,
@@ -41,24 +43,35 @@ class CreateProjectService {
       throw new AppError('User must be authenticated', 401);
     }
 
-    const base_url = formatBaseUrl(title);
-    const titleExit = await this.projectsRepository.findByBaseUrl(base_url);
+    const project = await this.projectsRepository.findById(id);
 
-    if (titleExit) {
-      throw new AppError('title already registered', 400);
+    if (!project) {
+      throw new AppError('Project does not exist');
     }
 
-    const project = await this.projectsRepository.create({
+    if (title !== project.title) {
+      const formateTitleBaseUrl = formatBaseUrl(title);
+      const baseUrl = await this.projectsRepository.findByBaseUrl(
+        formateTitleBaseUrl
+      );
+
+      if (baseUrl && baseUrl.id !== project.id) {
+        throw new AppError('title already registered');
+      }
+    }
+
+    Object.assign(project, {
       title,
       description,
       link_code,
       link_project,
       status,
-      users: [user],
     });
 
-    return classToClass(project);
+    const upProject = await this.projectsRepository.save(project);
+
+    return classToClass(upProject);
   }
 }
 
-export default CreateProjectService;
+export default UpdateProjectService;

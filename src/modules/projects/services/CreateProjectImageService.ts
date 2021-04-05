@@ -1,10 +1,10 @@
 import { inject, injectable } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import AppError from '@shared/errors/AppError';
 
 import removeFile from '@config/removeFile';
 import IProjectsRepository from '../repositories/IProjectsRepository';
-// import ProjectImage from '../infra/typeorm/entities/ProjectImage';
 import IProjectImagesRepository from '../repositories/IProjectImagesRepository';
 import ProjectImage from '../infra/typeorm/entities/ProjectImage';
 
@@ -33,17 +33,17 @@ class CreateProjectImageService {
     }
 
     if (project.image) {
-      const image = {
-        ...project.image,
+      const oldFile = project.image.filename;
+
+      Object.assign(project.image, {
         filename,
         url,
-      };
+      });
 
-      const upImage = await this.projectImagesRepository.save(image);
+      const upImage = await this.projectImagesRepository.save(project.image);
+      removeFile(oldFile);
 
-      removeFile(project.image.filename);
-
-      return upImage;
+      return classToClass(upImage);
     }
 
     const projectImage = await this.projectImagesRepository.create({
@@ -52,7 +52,7 @@ class CreateProjectImageService {
       proj_id,
     });
 
-    return projectImage;
+    return classToClass(projectImage);
   }
 }
 

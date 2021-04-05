@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -33,6 +34,15 @@ class ProjectImage {
   @OneToOne(() => Project)
   @JoinColumn({ name: 'proj_id' })
   project: Project;
+
+  @Expose({ name: 'url' })
+  getUrl(): string | null {
+    if (!this.filename) {
+      return null;
+    }
+
+    return `${process.env.BASE_URL}/files/${this.filename}`;
+  }
 
   constructor() {
     if (!this.id) {

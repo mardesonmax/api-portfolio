@@ -87,8 +87,6 @@ describe('CreateProjectImageService', () => {
       proj_id: project.id,
     });
 
-    console.log(project);
-
     expect(projectImage.filename).toBe('image_2.png');
   });
 });
