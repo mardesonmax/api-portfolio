@@ -33,7 +33,7 @@ class DeleteProjectService {
       throw new AppError('Project does not exist');
     }
 
-    await this.projectsRepository.remove(project);
+    await this.projectsRepository.delete(project);
 
     if (project.image) {
       removeFile(project.image.filename);

@@ -33,7 +33,7 @@ describe('ListProjectService', () => {
       user_id: user.id,
     });
 
-    const projects = await listProject.execute();
+    const projects = await listProject.execute({ admin: true });
 
     expect(projects).toMatchObject([project]);
   });

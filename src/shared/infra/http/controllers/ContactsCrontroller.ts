@@ -2,8 +2,17 @@ import { Request, Response } from 'express';
 
 import { container } from 'tsyringe';
 import ContactService from '@modules/users/services/ContactService';
+import ShowContactService from '@modules/users/services/ShowContactService';
 
 class ContactsController {
+  async show(request: Request, response: Response): Promise<Response> {
+    const contactsService = container.resolve(ShowContactService);
+
+    const contact = await contactsService.execute();
+
+    return response.json(contact);
+  }
+
   async create(request: Request, response: Response): Promise<Response> {
     const {
       user,

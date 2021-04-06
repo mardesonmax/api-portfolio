@@ -3,6 +3,7 @@ import { getRepository, Repository } from 'typeorm';
 import ICreateProjectDTO from '@modules/projects/dtos/ICreateProjectDTO';
 import Project from '@modules/projects/infra/typeorm/entities/Project';
 import IProjectsRepository from '@modules/projects/repositories/IProjectsRepository';
+import IFindByBaseUrlDTO from '@modules/projects/dtos/IFindByBaseUrlDTO';
 
 class ProjectsRepository implements IProjectsRepository {
   private ormRepository: Repository<Project>;
@@ -23,10 +24,15 @@ class ProjectsRepository implements IProjectsRepository {
     return this.ormRepository.save(project);
   }
 
-  async findAll(): Promise<Project[] | undefined> {
+  async findAll(admin = false): Promise<Project[] | undefined> {
     return this.ormRepository.find({
-      relations: ['image'],
+      where: admin
+        ? {}
+        : {
+            status: true,
+          },
       order: { created_at: 'DESC' },
+      relations: ['image'],
     });
   }
 
@@ -34,14 +40,24 @@ class ProjectsRepository implements IProjectsRepository {
     return this.ormRepository.findOne({ where: { id }, relations: ['image'] });
   }
 
-  async findByBaseUrl(base_url: string): Promise<Project | undefined> {
+  async findByBaseUrl({
+    base_url,
+    admin,
+  }: IFindByBaseUrlDTO): Promise<Project | undefined> {
     return this.ormRepository.findOne({
-      where: { base_url },
+      where: admin
+        ? {
+            base_url,
+          }
+        : {
+            base_url,
+            status: true,
+          },
       relations: ['image'],
     });
   }
 
-  async remove(project: Project): Promise<void> {
+  async delete(project: Project): Promise<void> {
     await this.ormRepository.remove(project);
   }
 }

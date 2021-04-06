@@ -1,5 +1,6 @@
 import formatBaseUrl from '@config/formatBaseUrl';
 import ICreateProjectDTO from '@modules/projects/dtos/ICreateProjectDTO';
+import IFindByBaseUrlDTO from '@modules/projects/dtos/IFindByBaseUrlDTO';
 import Project from '@modules/projects/infra/typeorm/entities/Project';
 import IProjectsRepository from '../IProjectsRepository';
 
@@ -36,11 +37,13 @@ class FakeProjectsRepository implements IProjectsRepository {
     return project;
   }
 
-  async findByBaseUrl(title: string): Promise<Project | undefined> {
-    return this.projects.find((item) => formatBaseUrl(item.title) === title);
+  async findByBaseUrl({
+    base_url,
+  }: IFindByBaseUrlDTO): Promise<Project | undefined> {
+    return this.projects.find((item) => formatBaseUrl(item.title) === base_url);
   }
 
-  async remove(project: Project): Promise<void> {
+  async delete(project: Project): Promise<void> {
     this.projects = this.projects.filter((item) => item.id !== project.id);
   }
 }

@@ -1,11 +1,12 @@
 import ICreateProjectDTO from '../dtos/ICreateProjectDTO';
+import IFindByBaseUrlDTO from '../dtos/IFindByBaseUrlDTO';
 import Project from '../infra/typeorm/entities/Project';
 
 export default interface IProjectsRepository {
   create(projectDate: ICreateProjectDTO): Promise<Project>;
   save(project: Project): Promise<Project>;
-  findAll(): Promise<Project[] | undefined>;
+  findAll(admin?: boolean): Promise<Project[] | undefined>;
   findById(proj_id: string): Promise<Project | undefined>;
-  findByBaseUrl(title: string): Promise<Project | undefined>;
-  remove(project: Project): Promise<void>;
+  findByBaseUrl(params: IFindByBaseUrlDTO): Promise<Project | undefined>;
+  delete(project: Project): Promise<void>;
 }

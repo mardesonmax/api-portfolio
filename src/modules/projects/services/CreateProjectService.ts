@@ -42,7 +42,10 @@ class CreateProjectService {
     }
 
     const base_url = formatBaseUrl(title);
-    const titleExit = await this.projectsRepository.findByBaseUrl(base_url);
+    const titleExit = await this.projectsRepository.findByBaseUrl({
+      base_url,
+      admin: true,
+    });
 
     if (titleExit) {
       throw new AppError('title already registered', 400);

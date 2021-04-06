@@ -3,6 +3,10 @@ import Contact from '@modules/users/infra/typeorm/entities/Contact';
 import IContactsRepository from '@modules/users/repositories/IContactsRepository';
 
 class FakeContactsRepository implements IContactsRepository {
+  find(): Promise<Contact | undefined> {
+    throw new Error('Method not implemented.');
+  }
+
   private contacts: Contact[] = [];
 
   async create(contactData: ICreateContactDTO): Promise<Contact> {
@@ -26,6 +30,12 @@ class FakeContactsRepository implements IContactsRepository {
     const contact = this.contacts.find(
       (findContact) => findContact.user_id === user_id
     );
+
+    return contact;
+  }
+
+  async findOne(): Promise<Contact | undefined> {
+    const contact = this.contacts[0];
 
     return contact;
   }

@@ -51,9 +51,10 @@ class UpdateProjectService {
 
     if (title !== project.title) {
       const formateTitleBaseUrl = formatBaseUrl(title);
-      const baseUrl = await this.projectsRepository.findByBaseUrl(
-        formateTitleBaseUrl
-      );
+      const baseUrl = await this.projectsRepository.findByBaseUrl({
+        base_url: formateTitleBaseUrl,
+        admin: true,
+      });
 
       if (baseUrl && baseUrl.id !== project.id) {
         throw new AppError('title already registered');

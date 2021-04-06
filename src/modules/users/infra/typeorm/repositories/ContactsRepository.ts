@@ -31,6 +31,11 @@ class ContactsRepository implements IContactsRepository {
     });
     return contact;
   }
+
+  async findOne(): Promise<Contact | undefined> {
+    const contact = await this.ormRepository.findOne();
+    return contact;
+  }
 }
 
 export default ContactsRepository;

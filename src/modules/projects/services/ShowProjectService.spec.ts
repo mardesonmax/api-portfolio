@@ -1,4 +1,5 @@
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
+import AppError from '@shared/errors/AppError';
 import FakeProjectsRepository from '../repositories/fakes/FakeProjectsRepository';
 import CreateProjectService from './CreateProjectService';
 import ShowProjectService from './ShowProjectService';
@@ -31,11 +32,16 @@ describe('ShowProjectService', () => {
       description: 'Description and project',
       status: true,
       user_id: user.id,
-      base_url: 'new_project',
     });
 
-    const result = await showProject.execute('new_project');
+    const result = await showProject.execute({ base_url: 'new_project' });
 
     expect(result?.id).toBe(project.id);
+  });
+
+  it('should not be able show project does not exit', async () => {
+    await expect(
+      showProject.execute({ base_url: 'undefined' })
+    ).rejects.toBeInstanceOf(AppError);
   });
 });

@@ -9,19 +9,23 @@ import DeleteProjectService from '@modules/projects/services/DeleteProjectServic
 
 class ProjectsController {
   async show(request: Request, response: Response): Promise<Response> {
-    const { base_url } = request.params;
+    const {
+      params: { base_url },
+      query: { admin },
+    } = request;
 
-    const listProjects = container.resolve(ShowProjectService);
+    const showProject = container.resolve(ShowProjectService);
 
-    const projects = await listProjects.execute(base_url);
+    const project = await showProject.execute({ base_url, admin: !!admin });
 
-    return response.json(projects);
+    return response.json(project);
   }
 
   async index(request: Request, response: Response): Promise<Response> {
+    const { admin } = request.query;
     const listProjects = container.resolve(ListProjectService);
 
-    const projects = await listProjects.execute();
+    const projects = await listProjects.execute({ admin: !!admin });
 
     return response.json(projects);
   }

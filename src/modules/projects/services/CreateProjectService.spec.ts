@@ -55,6 +55,7 @@ describe('CreateProjectService', () => {
     await createProject.execute({
       title: 'New Project',
       description: 'Description and project',
+      base_url: 'new_project',
       status: true,
       user_id: user.id,
     });

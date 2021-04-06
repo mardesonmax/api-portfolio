@@ -7,6 +7,7 @@ const contactsController = new ContactsController();
 
 const contactRouter = Router();
 
+contactRouter.get('/', contactsController.show);
 contactRouter.post('/', ensureAuthenticated, contactsController.create);
 
 export default contactRouter;

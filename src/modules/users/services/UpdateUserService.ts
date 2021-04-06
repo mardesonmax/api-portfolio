@@ -10,7 +10,7 @@ interface IUserProps {
   id: string;
   name: string;
   email: string;
-  password: string;
+  password?: string;
 }
 
 @injectable()
@@ -30,11 +30,13 @@ class UpdateUserService {
       throw new AppError('User does not authenticated', 401);
     }
 
-    const passwordHash = await this.hashProvider.generateHash(password);
-
     user.name = name;
     user.email = email;
-    user.password = passwordHash;
+
+    if (password) {
+      const passwordHash = await this.hashProvider.generateHash(password);
+      user.password = passwordHash;
+    }
 
     await this.usersRepository.save(user);
 

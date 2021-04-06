@@ -25,7 +25,7 @@ describe('DeleteProjectService', () => {
       password: '123456',
     });
 
-    const spy = jest.spyOn(fakeProjectsRepository, 'remove');
+    const spy = jest.spyOn(fakeProjectsRepository, 'delete');
 
     const project = await fakeProjectsRepository.create({
       title: 'New Project',
@@ -56,7 +56,7 @@ describe('DeleteProjectService', () => {
       password: '123456',
     });
 
-    const spy = jest.spyOn(fakeProjectsRepository, 'remove');
+    const spy = jest.spyOn(fakeProjectsRepository, 'delete');
 
     const project = await fakeProjectsRepository.create({
       title: 'New Project',

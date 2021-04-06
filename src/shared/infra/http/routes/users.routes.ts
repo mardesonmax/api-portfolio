@@ -8,6 +8,6 @@ const usersController = new UsersController();
 
 usersRouter.use(ensureAuthenticated);
 
-usersRouter.put('/', usersController.update);
+usersRouter.post('/', usersController.update);
 
 export default usersRouter;
