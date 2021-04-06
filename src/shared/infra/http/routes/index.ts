@@ -1,10 +1,10 @@
 import { Router } from 'express';
 
-import sessionsRouter from './sessions.routes';
-import usersRouter from './users.routes';
-import contactsRouter from './contacts.routes';
-import projectsRouter from './projects.routes';
-import aboutRouter from './about.routes';
+import usersRouter from '@modules/users/infra/http/routes/users.routes';
+import sessionsRouter from '@modules/users/infra/http/routes/sessions.routes';
+import contactsRouter from '@modules/users/infra/http/routes/contacts.routes';
+import projectsRouter from '@modules/projects/infra/http/routes/projects.routes';
+import aboutRouter from '@modules/about/infra/http/routes/about.routes';
 
 const routes = Router();
 

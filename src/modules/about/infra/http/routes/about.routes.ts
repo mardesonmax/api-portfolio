@@ -1,6 +1,7 @@
 import { Router } from 'express';
+
+import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
 import AboutController from '../controllers/AboutController';
-import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const aboutController = new AboutController();
 

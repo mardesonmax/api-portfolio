@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
+import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
 import ContactsController from '../controllers/ContactsCrontroller';
-import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const contactsController = new ContactsController();
 
