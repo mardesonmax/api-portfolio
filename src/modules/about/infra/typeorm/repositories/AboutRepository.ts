@@ -23,6 +23,30 @@ class AboutRepository implements IAboutRepository {
 
     return this.ormRepository.save(about);
   }
+
+  async save(about: About): Promise<About> {
+    return this.ormRepository.save(about);
+  }
+
+  async findByUserId(user_id: string): Promise<About[] | undefined> {
+    return this.ormRepository.find({
+      where: { user_id },
+    });
+  }
+
+  async findAll(): Promise<About[] | undefined> {
+    return this.ormRepository.find({
+      order: { created_at: 'ASC' },
+    });
+  }
+
+  async findById(id: string): Promise<About | undefined> {
+    return this.ormRepository.findOne({ id });
+  }
+
+  async delete(about: About): Promise<void> {
+    await this.ormRepository.remove(about);
+  }
 }
 
 export default AboutRepository;

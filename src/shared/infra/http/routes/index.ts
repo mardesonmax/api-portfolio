@@ -16,6 +16,6 @@ routes.use('/contacts', contactsRouter);
 
 routes.use('/projects', projectsRouter);
 
-routes.use('/about', aboutRouter);
+routes.use('/abouts', aboutRouter);
 
 export default routes;

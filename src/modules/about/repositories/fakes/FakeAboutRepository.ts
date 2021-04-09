@@ -21,6 +21,30 @@ class FakeAboutRepository implements IAboutRepository {
 
     return about;
   }
+
+  async findByUserId(user_id: string): Promise<About[] | undefined> {
+    return this.abouts.filter((about) => about.user_id === user_id);
+  }
+
+  async findAll(): Promise<About[] | undefined> {
+    return this.abouts;
+  }
+
+  async save(about: About): Promise<About> {
+    const aboutIndex = this.abouts.findIndex((find) => find.id === about.id);
+
+    this.abouts[aboutIndex] = about;
+
+    return about;
+  }
+
+  async findById(id: string): Promise<About | undefined> {
+    return this.abouts.find((about) => about.id === id);
+  }
+
+  async delete(about: About): Promise<void> {
+    this.abouts = this.abouts.filter((find) => find.id !== about.id);
+  }
 }
 
 export default FakeAboutRepository;
