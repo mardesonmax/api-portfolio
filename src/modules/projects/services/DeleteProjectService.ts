@@ -2,7 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
-import removeFile from '@config/removeFile';
+import IStorageProvider from '@shared/container/provider/StorageProvider/models/IStorageProvider';
 import IProjectsRepository from '../repositories/IProjectsRepository';
 
 interface IRequest {
@@ -17,7 +17,10 @@ class DeleteProjectService {
     private usersRepository: IUsersRepository,
 
     @inject('ProjectsRepository')
-    private projectsRepository: IProjectsRepository
+    private projectsRepository: IProjectsRepository,
+
+    @inject('StorageProvider')
+    private storageProvider: IStorageProvider
   ) {}
 
   async execute({ proj_id, user_id }: IRequest): Promise<void> {
@@ -36,7 +39,7 @@ class DeleteProjectService {
     await this.projectsRepository.delete(project);
 
     if (project.image) {
-      removeFile(project.image.filename);
+      await this.storageProvider.deleteFile(project.image.filename);
     }
   }
 }

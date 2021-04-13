@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
+import uploadConfig from '@config/upload';
 import Project from './Project';
 
 @Entity('project_images')
@@ -41,7 +42,14 @@ class ProjectImage {
       return null;
     }
 
-    return `${process.env.BASE_URL}/files/${this.filename}`;
+    switch (uploadConfig.driver) {
+      case 'disk':
+        return `${process.env.API_BASE_URL}/files/${this.filename}`;
+      case 's3':
+        return `https://${uploadConfig.aws.bucket}.s3.amazonaws.com/${this.filename}`;
+      default:
+        return null;
+    }
   }
 
   constructor() {

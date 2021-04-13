@@ -1,8 +1,9 @@
 /node_modules
 /dist
-.vscode
+/coverage
+/.vscode
+
 .env
 ormconfig.json
-coverage
 tmp/upload/*
 !tmp/upload/.gitkeep

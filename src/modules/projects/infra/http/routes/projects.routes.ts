@@ -5,14 +5,14 @@ import uploadConfig from '@config/upload';
 
 import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
 import ProjectsController from '../controllers/ProjectsController';
-import ProjectImagesController from '../controllers/ProjectImagesController';
+import UpdateProjectImagesController from '../controllers/UpdateProjectImagesController';
 
 const projectsController = new ProjectsController();
-const projectImagesController = new ProjectImagesController();
+const updateProjectImagesController = new UpdateProjectImagesController();
 
 const projectsRouter = Router();
 
-const upload = multer(uploadConfig);
+const upload = multer(uploadConfig.multer);
 
 projectsRouter.post('/', ensureAuthenticated, projectsController.create);
 
@@ -32,7 +32,7 @@ projectsRouter.patch(
   '/',
   ensureAuthenticated,
   upload.single('image'),
-  projectImagesController.create
+  updateProjectImagesController.create
 );
 
 projectsRouter.get('/:base_url', projectsController.show);

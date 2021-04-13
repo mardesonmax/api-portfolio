@@ -1,36 +1,41 @@
 import AppError from '@shared/errors/AppError';
 
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
+import FakeStorageProvider from '@shared/container/provider/StorageProvider/fakes/FakeStorageProvider';
 import FakeProjectsRepository from '../repositories/fakes/FakeProjectsRepository';
 import CreateProjectService from './CreateProjectService';
-import CreateProjectImageService from './CreateProjectImageService';
+import UpdateProjectImageService from './UpdateProjectImageService';
 import FakeProjectImagesRepository from '../repositories/fakes/FakeProjectImagesRepository';
 
 let fakeProjectsRepository: FakeProjectsRepository;
 let fakeProjectImagesRepository: FakeProjectImagesRepository;
-let createProjectImage: CreateProjectImageService;
+let updateProjectImage: UpdateProjectImageService;
 let fakeUsersRepository: FakeUsersRepository;
 let createProject: CreateProjectService;
+let fakeStorageProvider: FakeStorageProvider;
 
 describe('CreateProjectImageService', () => {
   beforeEach(() => {
     fakeProjectsRepository = new FakeProjectsRepository();
     fakeProjectImagesRepository = new FakeProjectImagesRepository();
     fakeUsersRepository = new FakeUsersRepository();
+    fakeStorageProvider = new FakeStorageProvider();
+
     createProject = new CreateProjectService(
       fakeUsersRepository,
       fakeProjectsRepository
     );
 
-    createProjectImage = new CreateProjectImageService(
+    updateProjectImage = new UpdateProjectImageService(
       fakeProjectsRepository,
-      fakeProjectImagesRepository
+      fakeProjectImagesRepository,
+      fakeStorageProvider
     );
   });
 
   it('should not be able create image on project invalid', async () => {
     await expect(
-      createProjectImage.execute({
+      updateProjectImage.execute({
         filename: 'image.png',
         proj_id: 'invalid_project',
       })
@@ -51,7 +56,7 @@ describe('CreateProjectImageService', () => {
       user_id: user.id,
     });
 
-    const projectImage = await createProjectImage.execute({
+    const projectImage = await updateProjectImage.execute({
       filename: 'image.png',
       proj_id: project.id,
     });
@@ -73,7 +78,7 @@ describe('CreateProjectImageService', () => {
       user_id: user.id,
     });
 
-    const image = await createProjectImage.execute({
+    const image = await updateProjectImage.execute({
       filename: 'image_2.png',
       proj_id: project.id,
     });
@@ -82,7 +87,7 @@ describe('CreateProjectImageService', () => {
 
     await fakeProjectsRepository.save(project);
 
-    const projectImage = await createProjectImage.execute({
+    const projectImage = await updateProjectImage.execute({
       filename: 'image_2.png',
       proj_id: project.id,
     });

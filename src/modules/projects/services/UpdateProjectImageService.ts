@@ -3,7 +3,7 @@ import { classToClass } from 'class-transformer';
 
 import AppError from '@shared/errors/AppError';
 
-import removeFile from '@config/removeFile';
+import IStorageProvider from '@shared/container/provider/StorageProvider/models/IStorageProvider';
 import IProjectsRepository from '../repositories/IProjectsRepository';
 import IProjectImagesRepository from '../repositories/IProjectImagesRepository';
 import ProjectImage from '../infra/typeorm/entities/ProjectImage';
@@ -15,39 +15,46 @@ interface IRequest {
 }
 
 @injectable()
-class CreateProjectImageService {
+class UpdateProjectImageService {
   constructor(
     @inject('ProjectsRepository')
     private projectsRepository: IProjectsRepository,
 
     @inject('ProjectImagesRepository')
-    private projectImagesRepository: IProjectImagesRepository
+    private projectImagesRepository: IProjectImagesRepository,
+
+    @inject('StorageProvider')
+    private storageProvider: IStorageProvider
   ) {}
 
   async execute({ proj_id, filename, url }: IRequest): Promise<ProjectImage> {
     const project = await this.projectsRepository.findById(proj_id);
 
     if (!project) {
-      removeFile(filename);
+      await this.storageProvider.deleteFile(filename);
       throw new AppError('Project does not exist');
     }
 
     if (project.image) {
       const oldFile = project.image.filename;
+      const image = await this.storageProvider.saveFile(filename);
 
       Object.assign(project.image, {
-        filename,
+        filename: image,
         url,
       });
 
-      const upImage = await this.projectImagesRepository.save(project.image);
-      removeFile(oldFile);
+      await this.projectImagesRepository.save(project.image);
 
-      return classToClass(upImage);
+      await this.storageProvider.deleteFile(oldFile);
+
+      return classToClass(project.image);
     }
 
+    const image = await this.storageProvider.saveFile(filename);
+
     const projectImage = await this.projectImagesRepository.create({
-      filename,
+      filename: image,
       url,
       proj_id,
     });
@@ -56,4 +63,4 @@ class CreateProjectImageService {
   }
 }
 
-export default CreateProjectImageService;
+export default UpdateProjectImageService;
