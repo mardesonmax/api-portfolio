@@ -6,7 +6,7 @@ import UpdateProjectImageService from '@modules/projects/services/UpdateProjectI
 class UpdateProjectImagesController {
   async create(request: Request, response: Response): Promise<Response> {
     const {
-      body: { proj_id },
+      params: { proj_id },
       file: { filename },
     } = request;
 

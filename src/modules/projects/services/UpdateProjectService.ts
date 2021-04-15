@@ -4,6 +4,7 @@ import { inject, injectable } from 'tsyringe';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 import formatBaseUrl from '@config/formatBaseUrl';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import Project from '../infra/typeorm/entities/Project';
 import IProjectsRepository from '../repositories/IProjectsRepository';
 
@@ -25,7 +26,10 @@ class UpdateProjectService {
     private usersRepository: IUsersRepository,
 
     @inject('ProjectsRepository')
-    private projectsRepository: IProjectsRepository
+    private projectsRepository: IProjectsRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider
   ) {}
 
   async execute({
@@ -61,6 +65,8 @@ class UpdateProjectService {
       }
     }
 
+    await this.cacheProvider.invalidate(`project-item:${project.base_url}`);
+
     Object.assign(project, {
       title,
       description,
@@ -70,6 +76,8 @@ class UpdateProjectService {
     });
 
     const upProject = await this.projectsRepository.save(project);
+
+    await this.cacheProvider.invalidate('projects-list');
 
     return classToClass(upProject);
   }

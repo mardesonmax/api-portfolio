@@ -6,7 +6,7 @@ import UpdateUserService from '@modules/users/services/UpdateUserService';
 class UsersController {
   async update(request: Request, response: Response): Promise<Response> {
     const {
-      body: { name, email, password },
+      body: { name, email, new_password, old_password },
       user: { id },
     } = request;
 
@@ -16,7 +16,8 @@ class UsersController {
       id,
       name,
       email,
-      password,
+      old_password,
+      new_password,
     });
 
     return response.json(user);

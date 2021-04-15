@@ -26,7 +26,7 @@ class FakeAboutRepository implements IAboutRepository {
     return this.abouts.filter((about) => about.user_id === user_id);
   }
 
-  async findAll(): Promise<About[] | undefined> {
+  async findAll(): Promise<About[]> {
     return this.abouts;
   }
 

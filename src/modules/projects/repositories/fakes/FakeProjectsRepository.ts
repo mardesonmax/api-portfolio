@@ -27,7 +27,7 @@ class FakeProjectsRepository implements IProjectsRepository {
     return project;
   }
 
-  async findAll(): Promise<Project[] | undefined> {
+  async findAll(): Promise<Project[]> {
     return this.projects;
   }
 

@@ -28,14 +28,14 @@ class Project {
   @Column()
   description: string;
 
-  @Column({ nullable: true })
-  link_code?: string;
+  @Column()
+  link_code: string;
 
-  @Column({ nullable: true })
-  link_project?: string;
+  @Column()
+  link_project: string;
 
-  @Column({ nullable: true })
-  base_url?: string;
+  @Column()
+  base_url: string;
 
   @OneToOne(() => ProjectImage, (image) => image.project)
   image: ProjectImage;
@@ -48,7 +48,7 @@ class Project {
   }
 
   @Column()
-  status: boolean;
+  status?: boolean;
 
   @CreateDateColumn()
   created_at: Date;

@@ -1,4 +1,5 @@
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
 import ICreateAboutDTO from '../dtos/ICreateAboutDTO';
@@ -12,7 +13,10 @@ class CreateAboutService {
     private usersRepository: IUsersRepository,
 
     @inject('AboutRepository')
-    private aboutRepository: IAboutRepository
+    private aboutRepository: IAboutRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider
   ) {}
 
   async execute({
@@ -31,6 +35,8 @@ class CreateAboutService {
       title,
       description,
     });
+
+    await this.cacheProvider.invalidate('abouts-list');
 
     return about;
   }

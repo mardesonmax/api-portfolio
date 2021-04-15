@@ -1,7 +1,8 @@
 import AppError from '@shared/errors/AppError';
 
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
-import FakeStorageProvider from '@shared/container/provider/StorageProvider/fakes/FakeStorageProvider';
+import FakeStorageProvider from '@shared/container/providers/StorageProvider/fakes/FakeStorageProvider';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import FakeProjectsRepository from '../repositories/fakes/FakeProjectsRepository';
 import CreateProjectService from './CreateProjectService';
 import UpdateProjectImageService from './UpdateProjectImageService';
@@ -13,6 +14,7 @@ let updateProjectImage: UpdateProjectImageService;
 let fakeUsersRepository: FakeUsersRepository;
 let createProject: CreateProjectService;
 let fakeStorageProvider: FakeStorageProvider;
+let fakeCacheProvider: FakeCacheProvider;
 
 describe('CreateProjectImageService', () => {
   beforeEach(() => {
@@ -20,10 +22,12 @@ describe('CreateProjectImageService', () => {
     fakeProjectImagesRepository = new FakeProjectImagesRepository();
     fakeUsersRepository = new FakeUsersRepository();
     fakeStorageProvider = new FakeStorageProvider();
+    fakeCacheProvider = new FakeCacheProvider();
 
     createProject = new CreateProjectService(
       fakeUsersRepository,
-      fakeProjectsRepository
+      fakeProjectsRepository,
+      fakeCacheProvider
     );
 
     updateProjectImage = new UpdateProjectImageService(

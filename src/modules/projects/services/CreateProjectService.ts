@@ -4,6 +4,7 @@ import { inject, injectable } from 'tsyringe';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 import formatBaseUrl from '@config/formatBaseUrl';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import Project from '../infra/typeorm/entities/Project';
 import IProjectsRepository from '../repositories/IProjectsRepository';
 
@@ -24,7 +25,10 @@ class CreateProjectService {
     private usersRepository: IUsersRepository,
 
     @inject('ProjectsRepository')
-    private projectsRepository: IProjectsRepository
+    private projectsRepository: IProjectsRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider
   ) {}
 
   async execute({
@@ -59,6 +63,8 @@ class CreateProjectService {
       status,
       users: [user],
     });
+
+    await this.cacheProvider.invalidate('projects-list');
 
     return classToClass(project);
   }

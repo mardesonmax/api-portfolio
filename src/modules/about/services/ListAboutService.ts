@@ -1,3 +1,4 @@
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import { inject, injectable } from 'tsyringe';
 import About from '../infra/typeorm/entities/About';
 import IAboutRepository from '../repositories/IAboutRepository';
@@ -6,13 +7,22 @@ import IAboutRepository from '../repositories/IAboutRepository';
 class ListAboutService {
   constructor(
     @inject('AboutRepository')
-    private aboutRepository: IAboutRepository
+    private aboutRepository: IAboutRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider
   ) {}
 
-  async execute(): Promise<About[] | undefined> {
-    const about = await this.aboutRepository.findAll();
+  async execute(): Promise<About[]> {
+    let abouts = await this.cacheProvider.recover<About[]>('abouts-list');
 
-    return about;
+    if (!abouts) {
+      abouts = await this.aboutRepository.findAll();
+
+      await this.cacheProvider.save('abouts-list', abouts);
+    }
+
+    return abouts;
   }
 }
 

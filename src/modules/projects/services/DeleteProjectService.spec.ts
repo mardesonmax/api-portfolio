@@ -1,5 +1,6 @@
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
-import FakeStorageProvider from '@shared/container/provider/StorageProvider/fakes/FakeStorageProvider';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
+import FakeStorageProvider from '@shared/container/providers/StorageProvider/fakes/FakeStorageProvider';
 import AppError from '@shared/errors/AppError';
 // import AppError from '@shared/errors/AppError';
 import FakeProjectsRepository from '../repositories/fakes/FakeProjectsRepository';
@@ -9,17 +10,20 @@ let deleteProject: DeleteProjectService;
 let fakeProjectsRepository: FakeProjectsRepository;
 let fakeUsersRepository: FakeUsersRepository;
 let fakeStorageProvider: FakeStorageProvider;
+let fakeCacheProvider: FakeCacheProvider;
 
 describe('DeleteProjectService', () => {
   beforeEach(() => {
     fakeProjectsRepository = new FakeProjectsRepository();
     fakeUsersRepository = new FakeUsersRepository();
     fakeStorageProvider = new FakeStorageProvider();
+    fakeCacheProvider = new FakeCacheProvider();
 
     deleteProject = new DeleteProjectService(
       fakeUsersRepository,
       fakeProjectsRepository,
-      fakeStorageProvider
+      fakeStorageProvider,
+      fakeCacheProvider
     );
   });
 

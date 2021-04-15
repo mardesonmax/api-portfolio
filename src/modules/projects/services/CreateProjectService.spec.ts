@@ -1,4 +1,5 @@
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import AppError from '@shared/errors/AppError';
 import FakeProjectsRepository from '../repositories/fakes/FakeProjectsRepository';
 import CreateProjectService from './CreateProjectService';
@@ -6,14 +7,18 @@ import CreateProjectService from './CreateProjectService';
 let createProject: CreateProjectService;
 let fakeProjectsRepository: FakeProjectsRepository;
 let fakeUsersRepository: FakeUsersRepository;
+let fakeCacheProvider: FakeCacheProvider;
 
 describe('CreateProjectService', () => {
   beforeEach(() => {
     fakeProjectsRepository = new FakeProjectsRepository();
     fakeUsersRepository = new FakeUsersRepository();
+    fakeCacheProvider = new FakeCacheProvider();
+
     createProject = new CreateProjectService(
       fakeUsersRepository,
-      fakeProjectsRepository
+      fakeProjectsRepository,
+      fakeCacheProvider
     );
   });
 

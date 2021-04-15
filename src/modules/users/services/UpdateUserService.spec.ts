@@ -1,5 +1,5 @@
 import AppError from '@shared/errors/AppError';
-import FakeHashProvide from '../provider/HashProvider/fakes/FakeHashProvider';
+import FakeHashProvide from '../providers/HashProvider/fakes/FakeHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import UpdateUserService from './UpdateUserService';
 
@@ -44,10 +44,46 @@ describe('UpdateUserService', () => {
       id: user.id,
       name: 'Test User',
       email: 'test@email.com',
-      password: '102030',
+      old_password: '123456',
+      new_password: '102030',
     });
 
     expect(spy).toHaveBeenCalledWith('102030');
+  });
+
+  it('should not be able to update the user password without passing the old password', async () => {
+    const user = await fakeUserRepository.create({
+      name: 'Test User',
+      email: 'test@email.com',
+      password: '123456',
+    });
+
+    await expect(
+      updateUser.execute({
+        id: user.id,
+        name: 'Test User',
+        email: 'test@email.com',
+        new_password: '102030',
+      })
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to update the user password if the old password is invalid', async () => {
+    const user = await fakeUserRepository.create({
+      name: 'Test User',
+      email: 'test@email.com',
+      password: '123456',
+    });
+
+    await expect(
+      updateUser.execute({
+        id: user.id,
+        name: 'Test User',
+        email: 'test@email.com',
+        new_password: '102030',
+        old_password: 'invalid_password',
+      })
+    ).rejects.toBeInstanceOf(AppError);
   });
 
   it('should not be able to update user non authenticated', async () => {

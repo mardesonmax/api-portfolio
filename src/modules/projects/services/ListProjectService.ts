@@ -1,6 +1,7 @@
 import { classToClass } from 'class-transformer';
 import { inject, injectable } from 'tsyringe';
 
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import Project from '../infra/typeorm/entities/Project';
 import IProjectsRepository from '../repositories/IProjectsRepository';
 
@@ -12,13 +13,26 @@ interface IRequest {
 class ListProjectService {
   constructor(
     @inject('ProjectsRepository')
-    private projectsRepository: IProjectsRepository
+    private projectsRepository: IProjectsRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider
   ) {}
 
-  async execute({ admin }: IRequest): Promise<Project[] | undefined> {
-    const projects = await this.projectsRepository.findAll(admin);
+  async execute({ admin }: IRequest): Promise<Project[]> {
+    let projects = await this.cacheProvider.recover<Project[]>('projects-list');
 
-    return classToClass(projects);
+    if (!projects && !admin) {
+      const result = await this.projectsRepository.findAll();
+
+      projects = classToClass(result);
+
+      await this.cacheProvider.save('projects-list', projects);
+
+      return projects;
+    }
+
+    return classToClass(await this.projectsRepository.findAll(admin));
   }
 }
 

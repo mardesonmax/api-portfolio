@@ -1,6 +1,8 @@
-import IUsersRepository from '@modules/users/repositories/IUsersRepository';
-import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
+
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+import AppError from '@shared/errors/AppError';
 import IUpdateAboutDTO from '../dtos/IUpdateAboutDTO';
 import About from '../infra/typeorm/entities/About';
 import IAboutRepository from '../repositories/IAboutRepository';
@@ -12,7 +14,10 @@ class UpdateAboutService {
     private usersRepository: IUsersRepository,
 
     @inject('AboutRepository')
-    private aboutRepository: IAboutRepository
+    private aboutRepository: IAboutRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider
   ) {}
 
   async execute({
@@ -37,6 +42,8 @@ class UpdateAboutService {
       title,
       description,
     });
+
+    await this.cacheProvider.invalidate('abouts-list');
 
     return this.aboutRepository.save(about);
   }

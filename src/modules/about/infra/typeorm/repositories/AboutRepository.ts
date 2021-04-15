@@ -34,7 +34,7 @@ class AboutRepository implements IAboutRepository {
     });
   }
 
-  async findAll(): Promise<About[] | undefined> {
+  async findAll(): Promise<About[]> {
     return this.ormRepository.find({
       order: { created_at: 'ASC' },
     });

@@ -24,7 +24,7 @@ class ProjectsRepository implements IProjectsRepository {
     return this.ormRepository.save(project);
   }
 
-  async findAll(admin = false): Promise<Project[] | undefined> {
+  async findAll(admin = false): Promise<Project[]> {
     return this.ormRepository.find({
       where: admin
         ? {}

@@ -1,4 +1,5 @@
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
 import IAboutRepository from '../repositories/IAboutRepository';
@@ -15,7 +16,10 @@ class DeleteAboutService {
     private usersRepository: IUsersRepository,
 
     @inject('AboutRepository')
-    private aboutRepository: IAboutRepository
+    private aboutRepository: IAboutRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider
   ) {}
 
   async execute({ user_id, about_id }: IRequest): Promise<void> {
@@ -32,6 +36,7 @@ class DeleteAboutService {
     }
 
     await this.aboutRepository.delete(about);
+    await this.cacheProvider.invalidate('abouts-list');
   }
 }
 

@@ -1,4 +1,4 @@
-import '@modules/users/provider';
-import '@modules/projects/provider';
-import '@modules/about/provider';
-import './provider';
+import '@modules/users/providers';
+import '@modules/projects/providers';
+import '@modules/about/providers';
+import './providers';

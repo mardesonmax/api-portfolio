@@ -1,4 +1,3 @@
-import User from '@modules/users/infra/typeorm/entities/User';
 import {
   Column,
   CreateDateColumn,
@@ -10,6 +9,7 @@ import {
 } from 'typeorm';
 
 import { v4 as uuid } from 'uuid';
+import User from '@modules/users/infra/typeorm/entities/User';
 
 @Entity('abouts')
 class About {

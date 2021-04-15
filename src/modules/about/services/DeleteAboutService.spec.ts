@@ -1,20 +1,24 @@
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import AppError from '@shared/errors/AppError';
 import FakeAboutRepository from '../repositories/fakes/FakeAboutRepository';
 import DeleteAboutService from './DeleteAboutService';
 
 let fakeUsersRepository: FakeUsersRepository;
 let fakeAboutRepository: FakeAboutRepository;
+let fakeCacheProvider: FakeCacheProvider;
 let deleteAboutService: DeleteAboutService;
 
 describe('DeleteAboutService', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
     fakeAboutRepository = new FakeAboutRepository();
+    fakeCacheProvider = new FakeCacheProvider();
 
     deleteAboutService = new DeleteAboutService(
       fakeUsersRepository,
-      fakeAboutRepository
+      fakeAboutRepository,
+      fakeCacheProvider
     );
   });
 

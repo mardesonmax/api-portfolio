@@ -1,4 +1,5 @@
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import AppError from '@shared/errors/AppError';
 import FakeProjectsRepository from '../repositories/fakes/FakeProjectsRepository';
 import UpdateProjectService from './UpdateProjectService';
@@ -6,14 +7,18 @@ import UpdateProjectService from './UpdateProjectService';
 let updateProject: UpdateProjectService;
 let fakeProjectsRepository: FakeProjectsRepository;
 let fakeUsersRepository: FakeUsersRepository;
+let fakeCacheProvider: FakeCacheProvider;
 
 describe('UpdateProjectService', () => {
   beforeEach(() => {
     fakeProjectsRepository = new FakeProjectsRepository();
     fakeUsersRepository = new FakeUsersRepository();
+    fakeCacheProvider = new FakeCacheProvider();
+
     updateProject = new UpdateProjectService(
       fakeUsersRepository,
-      fakeProjectsRepository
+      fakeProjectsRepository,
+      fakeCacheProvider
     );
   });
 

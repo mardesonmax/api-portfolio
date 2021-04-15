@@ -3,7 +3,7 @@ import { classToClass } from 'class-transformer';
 
 import AppError from '@shared/errors/AppError';
 
-import IStorageProvider from '@shared/container/provider/StorageProvider/models/IStorageProvider';
+import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import IProjectsRepository from '../repositories/IProjectsRepository';
 import IProjectImagesRepository from '../repositories/IProjectImagesRepository';
 import ProjectImage from '../infra/typeorm/entities/ProjectImage';

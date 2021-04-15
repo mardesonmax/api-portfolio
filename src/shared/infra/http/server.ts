@@ -2,27 +2,26 @@ import 'reflect-metadata';
 import 'dotenv/config';
 
 import express from 'express';
-import 'express-async-errors';
 import cors from 'cors';
-import delay from 'express-delay';
+import { errors } from 'celebrate';
+import 'express-async-errors';
 
-import '../typeorm';
-import '@shared/container';
 import configUpload from '@config/upload';
-
 import routes from './routes';
 import getErrors from './middlewares/getErrors';
 
+import '@shared/infra/typeorm';
+import '@shared/container';
+
 const app = express();
+
 app.use(cors());
 app.use(express.json());
-app.use(delay(1000));
-
+app.use('/files', express.static(configUpload.uploadsFolder));
 app.use(routes);
 
+app.use(errors());
 app.use(getErrors);
-
-app.use('/files', express.static(configUpload.uploadsFolder));
 
 const port = process.env.PORT || 3333;
 
