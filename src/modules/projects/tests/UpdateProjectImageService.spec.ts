@@ -4,8 +4,8 @@ import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepo
 import FakeStorageProvider from '@shared/container/providers/StorageProvider/fakes/FakeStorageProvider';
 import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import FakeProjectsRepository from '../repositories/fakes/FakeProjectsRepository';
-import CreateProjectService from './CreateProjectService';
-import UpdateProjectImageService from './UpdateProjectImageService';
+import CreateProjectService from '../services/CreateProjectService';
+import UpdateProjectImageService from '../services/UpdateProjectImageService';
 import FakeProjectImagesRepository from '../repositories/fakes/FakeProjectImagesRepository';
 
 let fakeProjectsRepository: FakeProjectsRepository;

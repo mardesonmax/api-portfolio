@@ -1,8 +1,8 @@
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
 import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import FakeProjectsRepository from '../repositories/fakes/FakeProjectsRepository';
-import CreateProjectService from './CreateProjectService';
-import ListProjectService from './ListProjectService';
+import CreateProjectService from '../services/CreateProjectService';
+import ListProjectService from '../services/ListProjectService';
 
 let listProject: ListProjectService;
 let createProject: CreateProjectService;
@@ -49,8 +49,8 @@ describe('ListProjectService', () => {
   it('should be able list all projects in the cache', async () => {
     const spy = jest.spyOn(fakeCacheProvider, 'save');
 
-    await listProject.execute({ admin: true });
-    await listProject.execute({ admin: true });
+    await listProject.execute({});
+    await listProject.execute({});
 
     expect(spy).toHaveBeenCalledTimes(1);
   });

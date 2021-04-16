@@ -2,7 +2,7 @@ import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepo
 import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import AppError from '@shared/errors/AppError';
 import FakeProjectsRepository from '../repositories/fakes/FakeProjectsRepository';
-import CreateProjectService from './CreateProjectService';
+import CreateProjectService from '../services/CreateProjectService';
 
 let createProject: CreateProjectService;
 let fakeProjectsRepository: FakeProjectsRepository;

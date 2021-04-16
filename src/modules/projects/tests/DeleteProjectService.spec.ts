@@ -4,7 +4,7 @@ import FakeStorageProvider from '@shared/container/providers/StorageProvider/fak
 import AppError from '@shared/errors/AppError';
 // import AppError from '@shared/errors/AppError';
 import FakeProjectsRepository from '../repositories/fakes/FakeProjectsRepository';
-import DeleteProjectService from './DeleteProjectService';
+import DeleteProjectService from '../services/DeleteProjectService';
 
 let deleteProject: DeleteProjectService;
 let fakeProjectsRepository: FakeProjectsRepository;

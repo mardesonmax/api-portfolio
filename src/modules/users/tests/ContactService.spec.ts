@@ -1,15 +1,20 @@
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import FakeContactsRepository from '../repositories/fakes/FakeContactsRepository';
-import ContactService from './ContactService';
+import ContactService from '../services/ContactService';
 
 let fakeContactsRepository: FakeContactsRepository;
-
+let fakeCacheProvider: FakeCacheProvider;
 let contactService: ContactService;
 
 describe('ContactUserService', () => {
   beforeEach(() => {
     fakeContactsRepository = new FakeContactsRepository();
+    fakeCacheProvider = new FakeCacheProvider();
 
-    contactService = new ContactService(fakeContactsRepository);
+    contactService = new ContactService(
+      fakeContactsRepository,
+      fakeCacheProvider
+    );
   });
 
   it('should be able to create contact', async () => {

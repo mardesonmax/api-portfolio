@@ -14,7 +14,7 @@ class ContactService {
     private cacheProvider: ICacheProvider
   ) {}
 
-  async execute(data: ICreateContactDTO): Promise<Contact> {
+  async execute(data: ICreateContactDTO): Promise<Contact | undefined> {
     const contactExist = await this.contactsRepository.findByUserId(
       data.user_id
     );

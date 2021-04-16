@@ -2,27 +2,27 @@ import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepo
 import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import AppError from '@shared/errors/AppError';
 import FakeAboutRepository from '../repositories/fakes/FakeAboutRepository';
-import UpdateAboutService from './UpdateAboutService';
+import DeleteAboutService from '../services/DeleteAboutService';
 
 let fakeUsersRepository: FakeUsersRepository;
 let fakeAboutRepository: FakeAboutRepository;
 let fakeCacheProvider: FakeCacheProvider;
-let updateAboutService: UpdateAboutService;
+let deleteAboutService: DeleteAboutService;
 
-describe('UpdateAboutService', () => {
+describe('DeleteAboutService', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
     fakeAboutRepository = new FakeAboutRepository();
     fakeCacheProvider = new FakeCacheProvider();
 
-    updateAboutService = new UpdateAboutService(
+    deleteAboutService = new DeleteAboutService(
       fakeUsersRepository,
       fakeAboutRepository,
       fakeCacheProvider
     );
   });
 
-  it('Should not be able update a new about me with user not authenticated', async () => {
+  it('Should not be able delete about me with user not authenticated', async () => {
     const user = await fakeUsersRepository.create({
       name: 'John Doe',
       email: 'john_doe@email.com',
@@ -36,16 +36,14 @@ describe('UpdateAboutService', () => {
     });
 
     await expect(
-      updateAboutService.execute({
-        id: about.id,
+      deleteAboutService.execute({
+        about_id: about.id,
         user_id: 'undefined',
-        title: 'Title about me',
-        description: 'Description about me',
       })
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should not be able update about me does not exist', async () => {
+  it('should not be able delete about me does not exist', async () => {
     const user = await fakeUsersRepository.create({
       name: 'John Doe',
       email: 'john_doe@email.com',
@@ -53,16 +51,14 @@ describe('UpdateAboutService', () => {
     });
 
     await expect(
-      updateAboutService.execute({
-        id: 'undefined',
+      deleteAboutService.execute({
+        about_id: 'undefined',
         user_id: user.id,
-        title: 'Title about me',
-        description: 'Description about me',
       })
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should not be able to update about me from another user', async () => {
+  it('should not be able to delete about me from another user', async () => {
     const user = await fakeUsersRepository.create({
       name: 'John Doe',
       email: 'john_doe@email.com',
@@ -82,16 +78,16 @@ describe('UpdateAboutService', () => {
     });
 
     await expect(
-      updateAboutService.execute({
-        id: about.id,
+      deleteAboutService.execute({
+        about_id: about.id,
         user_id: user2.id,
-        title: 'Title about me',
-        description: 'Description about me',
       })
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should be able to update about me', async () => {
+  it('should be able to delete about me', async () => {
+    const spy = jest.spyOn(fakeAboutRepository, 'delete');
+
     const user = await fakeUsersRepository.create({
       name: 'John Doe',
       email: 'john_doe@email.com',
@@ -104,13 +100,11 @@ describe('UpdateAboutService', () => {
       description: 'Description about me',
     });
 
-    const upAbout = await updateAboutService.execute({
-      id: about.id,
+    await deleteAboutService.execute({
+      about_id: about.id,
       user_id: user.id,
-      title: 'Title about me',
-      description: 'Description about me',
     });
 
-    expect(upAbout.id).toBe(about.id);
+    expect(spy).toHaveBeenCalledWith(about);
   });
 });
