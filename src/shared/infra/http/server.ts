@@ -12,11 +12,13 @@ import getErrors from './middlewares/getErrors';
 
 import '@shared/infra/typeorm';
 import '@shared/container';
+import rateLimiter from './middlewares/rateLimiter';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(rateLimiter);
 app.use('/files', express.static(configUpload.uploadsFolder));
 app.use(routes);
 
