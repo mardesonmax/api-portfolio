@@ -1,8 +1,8 @@
+import { container } from 'tsyringe';
 import { Request, Response } from 'express';
 
-import { container } from 'tsyringe';
-import ContactService from '@modules/users/services/ContactService';
-import ShowContactService from '@modules/users/services/ShowContactService';
+import ContactService from '@modules/contacts/services/ContactService';
+import ShowContactService from '@modules/contacts/services/ShowContactService';
 
 class ContactsController {
   async show(request: Request, response: Response): Promise<Response> {

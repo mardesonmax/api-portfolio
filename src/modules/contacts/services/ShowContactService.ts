@@ -13,8 +13,10 @@ class ShowContactService {
     private cacheProvider: ICacheProvider
   ) {}
 
-  async execute(): Promise<Contact> {
-    let contact = await this.cacheProvider.recover<Contact>('contact-show');
+  async execute(): Promise<Contact | undefined> {
+    let contact = await this.cacheProvider.recover<Contact | undefined>(
+      'contact-show'
+    );
 
     if (!contact) {
       contact = await this.contactsRepository.findOne();

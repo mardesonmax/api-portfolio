@@ -1,5 +1,5 @@
-import ICreateContactDTO from '@modules/users/dtos/ICreateContactDTO';
-import IContactsRepository from '@modules/users/repositories/IContactsRepository';
+import ICreateContactDTO from '@modules/contacts/dtos/ICreateContactDTO';
+import IContactsRepository from '@modules/contacts/repositories/IContactsRepository';
 import { getRepository, Repository } from 'typeorm';
 import Contact from '../entities/Contact';
 

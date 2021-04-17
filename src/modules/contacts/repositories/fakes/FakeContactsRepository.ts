@@ -1,6 +1,6 @@
-import ICreateContactDTO from '@modules/users/dtos/ICreateContactDTO';
-import Contact from '@modules/users/infra/typeorm/entities/Contact';
-import IContactsRepository from '@modules/users/repositories/IContactsRepository';
+import ICreateContactDTO from '@modules/contacts/dtos/ICreateContactDTO';
+import Contact from '@modules/contacts/infra/typeorm/entities/Contact';
+import IContactsRepository from '../IContactsRepository';
 
 class FakeContactsRepository implements IContactsRepository {
   find(): Promise<Contact | undefined> {

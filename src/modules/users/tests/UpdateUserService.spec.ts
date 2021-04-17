@@ -1,3 +1,4 @@
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import AppError from '@shared/errors/AppError';
 import FakeHashProvide from '../providers/HashProvider/fakes/FakeHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
@@ -5,13 +6,20 @@ import UpdateUserService from '../services/UpdateUserService';
 
 let fakeUserRepository: FakeUsersRepository;
 let fakeHashProvider: FakeHashProvide;
+let fakeCacheProvider: FakeCacheProvider;
 let updateUser: UpdateUserService;
 
 describe('UpdateUserService', () => {
   beforeEach(() => {
     fakeUserRepository = new FakeUsersRepository();
     fakeHashProvider = new FakeHashProvide();
-    updateUser = new UpdateUserService(fakeUserRepository, fakeHashProvider);
+    fakeCacheProvider = new FakeCacheProvider();
+
+    updateUser = new UpdateUserService(
+      fakeUserRepository,
+      fakeHashProvider,
+      fakeCacheProvider
+    );
   });
 
   it('should be able to update user name and email', async () => {

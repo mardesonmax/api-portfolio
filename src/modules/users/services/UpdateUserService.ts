@@ -3,6 +3,7 @@ import { classToClass } from 'class-transformer';
 
 import AppError from '@shared/errors/AppError';
 import User from '@modules/users/infra/typeorm/entities/User';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IUsersRepository from '../repositories/IUsersRepository';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
@@ -21,7 +22,10 @@ class UpdateUserService {
     private usersRepository: IUsersRepository,
 
     @inject('HashProvider')
-    private hashProvider: IHashProvider
+    private hashProvider: IHashProvider,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider
   ) {}
 
   async execute({
@@ -58,6 +62,8 @@ class UpdateUserService {
     user.email = email;
 
     await this.usersRepository.save(user);
+
+    await this.cacheProvider.save('show-profile', classToClass(user));
 
     return classToClass(user);
   }

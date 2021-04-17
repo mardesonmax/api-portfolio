@@ -24,8 +24,8 @@ describe('ContactUserService', () => {
     });
 
     expect(contact).toHaveProperty('id');
-    expect(contact.user_id).toEqual('123456789');
-    expect(contact.email).toEqual('test@email.com');
+    expect(contact?.user_id).toEqual('123456789');
+    expect(contact?.email).toEqual('test@email.com');
   });
 
   it('should be able to update contact', async () => {
@@ -40,8 +40,8 @@ describe('ContactUserService', () => {
       email: 'test2@email.com',
     });
 
-    expect(update.id).toEqual(contact.id);
-    expect(update.user_id).toEqual('123456789');
-    expect(update.email).toEqual('test2@email.com');
+    expect(update?.id).toEqual(contact?.id);
+    expect(update?.user_id).toEqual('123456789');
+    expect(update?.email).toEqual('test2@email.com');
   });
 });
