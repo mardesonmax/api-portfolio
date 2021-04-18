@@ -65,8 +65,6 @@ class UpdateProjectService {
       }
     }
 
-    await this.cacheProvider.invalidate(`project-item:${project.base_url}`);
-
     Object.assign(project, {
       title,
       description,

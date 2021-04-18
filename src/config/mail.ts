@@ -15,7 +15,7 @@ export default {
   defaults: {
     from: {
       email: 'mardeson@maxpb7.tk',
-      name: 'Mardeson da MAXPB7',
+      name: 'Portfólio',
     },
   },
 } as IMailConfig;

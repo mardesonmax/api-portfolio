@@ -16,7 +16,12 @@ import rateLimiter from './middlewares/rateLimiter';
 
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+  origin: process.env.WEB_BASE_URL,
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(rateLimiter);
 app.use('/files', express.static(configUpload.uploadsFolder));
